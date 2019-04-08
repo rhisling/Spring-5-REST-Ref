@@ -1,7 +1,6 @@
 package me.aravindh.springmvcrest.services;
 
 import me.aravindh.springmvcrest.api.v1.mapper.CustomerMapper;
-import me.aravindh.springmvcrest.api.v1.model.CategoryDTO;
 import me.aravindh.springmvcrest.api.v1.model.CustomerDTO;
 import me.aravindh.springmvcrest.domain.Customer;
 import me.aravindh.springmvcrest.repositories.CustomerRepository;
@@ -39,5 +38,18 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
                 .orElseThrow(RuntimeException::new); //todo implement better exception handling
+    }
+
+    @Override
+    public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+
+        Customer savedCustomer = customerRepository.save(customer);
+
+        CustomerDTO returnDto = customerMapper.customerToCustomerDTO(savedCustomer);
+
+        returnDto.setCustomerUrl("/api/v1/customer/" + savedCustomer.getId());
+
+        return returnDto;
     }
 }
