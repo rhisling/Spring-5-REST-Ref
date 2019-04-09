@@ -1,5 +1,8 @@
 package me.aravindh.springmvcrest.controllers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.annotations.Tag;
 import me.aravindh.springmvcrest.api.v1.model.CustomerDTO;
 import me.aravindh.springmvcrest.api.v1.model.CustomerListDTO;
 import me.aravindh.springmvcrest.services.CustomerService;
@@ -13,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
 
-    public static final String BASE_URL = "/api/v1/categories";
+    public static final String BASE_URL = "/api/v1/customers";
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
