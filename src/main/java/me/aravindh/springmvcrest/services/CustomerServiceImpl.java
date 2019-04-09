@@ -2,6 +2,7 @@ package me.aravindh.springmvcrest.services;
 
 import me.aravindh.springmvcrest.api.v1.mapper.CustomerMapper;
 import me.aravindh.springmvcrest.api.v1.model.CustomerDTO;
+import me.aravindh.springmvcrest.controllers.CustomerController;
 import me.aravindh.springmvcrest.domain.Customer;
 import me.aravindh.springmvcrest.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(customer -> {
                     CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-                    customerDTO.setCustomerUrl("/api/v1/customer/" + customer.getId());
+                    customerDTO.setCustomerUrl(CustomerController.BASE_URL + customer.getId());
                     return customerDTO;
                 })
                 .collect(Collectors.toList());
@@ -38,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
                 .map(customerDTO -> {
-                    customerDTO.setCustomerUrl("/api/v1/customer/" + id);
+                    customerDTO.setCustomerUrl(CustomerController.BASE_URL + id);
                     return customerDTO;
                 })
                 .orElseThrow(RuntimeException::new); //todo implement better exception handling
@@ -53,7 +54,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer savedCustomer = customerRepository.save(customer);
 
         CustomerDTO returnDto = customerMapper.customerToCustomerDTO(savedCustomer);
-        returnDto.setCustomerUrl("/api/v1/customer/" + savedCustomer.getId());
+        returnDto.setCustomerUrl(CustomerController.BASE_URL + savedCustomer.getId());
 
         return returnDto;
     }
@@ -70,17 +71,17 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
         return customerRepository.findById(id).map(customer -> {
 
-            if(customerDTO.getFirstname() != null){
+            if (customerDTO.getFirstname() != null) {
                 customer.setFirstname(customerDTO.getFirstname());
             }
 
-            if(customerDTO.getLastname() != null){
+            if (customerDTO.getLastname() != null) {
                 customer.setLastname(customerDTO.getLastname());
             }
 
             CustomerDTO returnDto = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
 
-            returnDto.setCustomerUrl("/api/v1/customer/" + id);
+            returnDto.setCustomerUrl(CustomerController.BASE_URL + id);
 
             return returnDto;
         }).orElseThrow(RuntimeException::new); //todo implement better exception handling;
